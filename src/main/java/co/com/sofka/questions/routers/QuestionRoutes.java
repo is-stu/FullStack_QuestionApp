@@ -60,4 +60,17 @@ public class QuestionRoutes {
         );
     }
 
+    @Bean
+    public RouterFunction<ServerResponse> getQuestionsOwner(QuestionsOwner ownerListUseCase) {
+        return route(
+                GET("/getOwnerAll/{userId}").and(accept(MediaType.APPLICATION_JSON)),
+                request -> ServerResponse.ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(BodyInserters.fromPublisher(ownerListUseCase.apply(
+                                request.pathVariable("userId")),
+                                QuestionDTO.class)
+                        )
+        );
+    }
+
 }
