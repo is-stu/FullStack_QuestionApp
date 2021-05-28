@@ -1,7 +1,7 @@
 package co.com.sofka.questions.usecases.question;
 
-import co.com.sofka.questions.reposioties.AnswerRepository;
-import co.com.sofka.questions.reposioties.QuestionRepository;
+import co.com.sofka.questions.repositories.AnswerRepository;
+import co.com.sofka.questions.repositories.QuestionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import reactor.core.publisher.Mono;

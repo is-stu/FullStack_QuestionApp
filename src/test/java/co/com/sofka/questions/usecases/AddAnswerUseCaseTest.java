@@ -3,7 +3,7 @@ package co.com.sofka.questions.usecases;
 import co.com.sofka.questions.collections.Answer;
 import co.com.sofka.questions.model.AnswerDTO;
 import co.com.sofka.questions.model.QuestionDTO;
-import co.com.sofka.questions.reposioties.AnswerRepository;
+import co.com.sofka.questions.repositories.AnswerRepository;
 import co.com.sofka.questions.usecases.answer.AddAnswerUseCase;
 import co.com.sofka.questions.usecases.question.GetQuestionUseCase;
 import org.junit.jupiter.api.Assertions;
@@ -13,8 +13,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import reactor.core.publisher.Mono;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class AddAnswerUseCaseTest {

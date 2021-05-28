@@ -1,35 +1,31 @@
 package co.com.sofka.questions.usecases.user;
 
-
-import co.com.sofka.questions.collections.User;
 import co.com.sofka.questions.mappers.MapperUtils;
 import co.com.sofka.questions.model.UserDTO;
 import co.com.sofka.questions.repositories.UserRepository;
-import co.com.sofka.questions.usecases.interfaces.SaveUser;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import reactor.core.publisher.Mono;
 
+import java.util.Objects;
+import java.util.function.Function;
+
 @Service
 @Validated
-public class CreateUserUseCase implements SaveUser {
-
+public class GetUserIdUseCase implements Function<String, Mono<UserDTO>> {
 
     private final UserRepository userRepository;
     private final MapperUtils mapperUtils;
 
-    public CreateUserUseCase(UserRepository userRepository, MapperUtils mapperUtils) {
+    public GetUserIdUseCase(UserRepository userRepository, MapperUtils mapperUtils) {
         this.userRepository = userRepository;
         this.mapperUtils = mapperUtils;
     }
 
-
     @Override
-    public Mono<String> apply(UserDTO userDTO) {
-        userDTO.valdiateEmail(userDTO.getEmail());
-        userDTO.valdiateEmail(userDTO.getAlternativeEmail());
-        return userRepository.
-                save(mapperUtils.mapperToUser(null).apply(userDTO))
-                .map(User::getId);
+    public Mono<UserDTO> apply(String id) {
+        Objects.requireNonNull(id, "Id requerido");
+        return userRepository.findById(id)
+                .map(user -> mapperUtils.mapEntityToUser().apply(user));
     }
 }

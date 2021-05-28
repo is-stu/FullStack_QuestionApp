@@ -1,7 +1,7 @@
 package co.com.sofka.questions.usecases;
 
 import co.com.sofka.questions.collections.Question;
-import co.com.sofka.questions.reposioties.QuestionRepository;
+import co.com.sofka.questions.repositories.QuestionRepository;
 import co.com.sofka.questions.usecases.question.GetAllQuestions;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

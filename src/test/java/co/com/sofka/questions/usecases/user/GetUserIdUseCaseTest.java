@@ -1,7 +1,6 @@
 package co.com.sofka.questions.usecases.user;
 
 import co.com.sofka.questions.collections.User;
-import co.com.sofka.questions.model.UserDTO;
 import co.com.sofka.questions.repositories.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -11,18 +10,20 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import reactor.core.publisher.Mono;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest
-class CreateUserUseCaseTest {
+class GetUserIdUseCaseTest {
 
     @MockBean
     UserRepository userRepository;
 
     @SpyBean
-    CreateUserUseCase createUserUseCase;
+    GetUserIdUseCase getUserIdUseCase;
 
     @Test
-    void createUserTest(){
-        var userDTO = new UserDTO("01","eduardo","ramirez","test@email.com","test1@email.com");
+    void getUserByIdTest(){
+
         var user = new User();
         user.setId("01");
         user.setName("daniel");
@@ -30,12 +31,15 @@ class CreateUserUseCaseTest {
         user.setEmail("dejara@gmai.com");
         user.setAlternativeEmail("test@gma.com");
 
-        Mockito.when(userRepository.save(Mockito.any(User.class))).thenReturn(Mono.just(user));
+        Mockito.when(userRepository.findById(user.getId())).thenReturn(Mono.just(user));
 
-        var resultUserId = createUserUseCase.apply(userDTO).block();
+        var userResult = getUserIdUseCase.apply(user.getId()).block();
 
-        Assertions.assertEquals(resultUserId,user.getId());
-        Assertions.assertEquals(resultUserId,userDTO.getId());
+        Assertions.assertEquals(userResult.getId(),user.getId());
+        Assertions.assertEquals(userResult.getName(),user.getName());
+        Assertions.assertEquals(userResult.getLastName(),user.getLastName());
+        Assertions.assertEquals(userResult.getEmail(),user.getEmail());
+        Assertions.assertEquals(userResult.getAlternativeEmail(),user.getAlternativeEmail());
 
     }
 
