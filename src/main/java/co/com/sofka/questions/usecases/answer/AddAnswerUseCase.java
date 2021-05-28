@@ -3,7 +3,7 @@ package co.com.sofka.questions.usecases.answer;
 import co.com.sofka.questions.mappers.MapperUtils;
 import co.com.sofka.questions.model.AnswerDTO;
 import co.com.sofka.questions.model.QuestionDTO;
-import co.com.sofka.questions.reposioties.AnswerRepository;
+import co.com.sofka.questions.repositories.AnswerRepository;
 import co.com.sofka.questions.usecases.interfaces.SaveAnswer;
 import co.com.sofka.questions.usecases.question.GetQuestionUseCase;
 import org.springframework.stereotype.Service;

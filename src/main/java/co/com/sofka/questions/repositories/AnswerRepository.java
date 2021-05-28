@@ -1,4 +1,4 @@
-package co.com.sofka.questions.reposioties;
+package co.com.sofka.questions.repositories;
 
 import co.com.sofka.questions.collections.Answer;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;

@@ -11,17 +11,19 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import reactor.core.publisher.Mono;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest
-class CreateUserUseCaseTest {
+class UpdateUserUseCaseTest {
 
     @MockBean
     UserRepository userRepository;
 
     @SpyBean
-    CreateUserUseCase createUserUseCase;
+    UpdateUserUseCase updateUserUseCase;
 
     @Test
-    void createUserTest(){
+    void updateUserUseCaseTest(){
         var userDTO = new UserDTO("01","eduardo","ramirez","test@email.com","test1@email.com");
         var user = new User();
         user.setId("01");
@@ -32,10 +34,10 @@ class CreateUserUseCaseTest {
 
         Mockito.when(userRepository.save(Mockito.any(User.class))).thenReturn(Mono.just(user));
 
-        var resultUserId = createUserUseCase.apply(userDTO).block();
+        var resultIdUpdate = updateUserUseCase.apply(userDTO).block();
 
-        Assertions.assertEquals(resultUserId,user.getId());
-        Assertions.assertEquals(resultUserId,userDTO.getId());
+        Assertions.assertEquals(resultIdUpdate,user.getId());
+        Assertions.assertEquals(resultIdUpdate,userDTO.getId());
 
     }
 
