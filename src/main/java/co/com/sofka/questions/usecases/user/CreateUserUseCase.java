@@ -26,6 +26,8 @@ public class CreateUserUseCase implements SaveUser {
 
     @Override
     public Mono<String> apply(UserDTO userDTO) {
+        userDTO.valdiateEmail(userDTO.getEmail());
+        userDTO.valdiateEmail(userDTO.getAlternativeEmail());
         return userRepository.
                 save(mapperUtils.mapperToUser(null).apply(userDTO))
                 .map(User::getId);
