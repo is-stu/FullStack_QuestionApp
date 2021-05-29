@@ -11,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 @Service
@@ -37,16 +38,8 @@ public class CreateUserUseCase implements SaveUser {
     }
 
     private UserDTO fullNameModify(UserDTO userDTO){
-        return  Optional.of(userDTO)
-                .map(userDTO1 -> userDTO1.getName().split(" "))
-                .filter(array -> array.length >= 4 ).map(array -> assignName(array,userDTO))
-                .orElseGet(() -> {
-                    var array = userDTO.getName().split(" ");
-                    userDTO.setName(array[0]);
-                    userDTO.setLastName(array[1] +" "+ array[2]);
+        return assignName(userDTO.getName().split(" "), userDTO);
 
-                    return userDTO;
-                });
     }
 
   private UserDTO assignName(String[] fullName, UserDTO userDTO){
@@ -54,10 +47,13 @@ public class CreateUserUseCase implements SaveUser {
         var index = fullName.length - 1;
         for (int i = 0; i < completeName.length; i++){
             completeName[i] = fullName[i];
+
         }
-        var name = Flux.just(completeName).reduce((s1,s2) -> s1 +" "+ s2).block();
-        userDTO.setName(name);
-        userDTO.setLastName(fullName[index - 1] +" "+ fullName[index]);
+        Arrays.stream(completeName).reduce((s1,s2) -> s1 +" "+ s2).map(s -> {
+            userDTO.setName(s);
+            userDTO.setLastName(fullName[index - 1] +" "+ fullName[index]);
+            return userDTO;
+        });
         return userDTO;
   }
 }
