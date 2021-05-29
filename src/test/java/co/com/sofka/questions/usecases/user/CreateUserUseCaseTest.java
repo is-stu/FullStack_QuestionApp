@@ -22,7 +22,7 @@ class CreateUserUseCaseTest {
 
     @Test
     void createUserTest(){
-        var userDTO = new UserDTO("01","eduardo","ramirez","test@email.com","test1@email.com");
+        var userDTO = new UserDTO("01","daniel eduardo  jaramillo ramirez","","test@email.com","test1@email.com");
         var user = new User();
         user.setId("01");
         user.setName("daniel");
