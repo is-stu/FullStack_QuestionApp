@@ -8,8 +8,10 @@ import co.com.sofka.questions.repositories.UserRepository;
 import co.com.sofka.questions.usecases.interfaces.SaveUser;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 @Service
@@ -31,23 +33,27 @@ public class CreateUserUseCase implements SaveUser {
         userDTO.valdiateEmail(userDTO.getEmail());
         userDTO.valdiateEmail(userDTO.getAlternativeEmail());
         return userRepository.
-                save(mapperUtils.mapperToUser(null).apply(fullNameModify(userDTO)))
+                save(mapperUtils.mapperToUser(userDTO.getId()).apply(fullNameModify(userDTO)))
                 .map(User::getId);
     }
 
     private UserDTO fullNameModify(UserDTO userDTO){
-       return  Optional.of(userDTO)
-                .map(userDTO1 -> userDTO1.getName().split(" "))
-                .filter(array -> array.length >= 4 ).map(array -> {
-                    userDTO.setName(array[0] +" "+ array [1]);
-                    userDTO.setLastName(array[2] +" " + array[3]);
-                    return userDTO;
-        }).orElseGet(() -> {
-           var array = userDTO.getName().split(" ");
-            userDTO.setName(array[0]);
-            userDTO.setLastName(array[1] +" "+ array[2]);
+        return assignName(userDTO.getName().split(" "), userDTO);
 
+    }
+
+  private UserDTO assignName(String[] fullName, UserDTO userDTO){
+        String[] completeName = new String[fullName.length - 2];
+        var index = fullName.length - 1;
+        for (int i = 0; i < completeName.length; i++){
+            completeName[i] = fullName[i];
+
+        }
+        Arrays.stream(completeName).reduce((s1,s2) -> s1 +" "+ s2).map(s -> {
+            userDTO.setName(s);
+            userDTO.setLastName(fullName[index - 1] +" "+ fullName[index]);
             return userDTO;
         });
-    }
+        return userDTO;
+  }
 }
