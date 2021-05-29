@@ -12,7 +12,7 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import reactor.core.publisher.Flux;
 
 @SpringBootTest
-class GetAllQuestionsUseCaseTest {
+class GetAllQuestionsTest {
 
     @MockBean
     QuestionRepository questionRepository;
