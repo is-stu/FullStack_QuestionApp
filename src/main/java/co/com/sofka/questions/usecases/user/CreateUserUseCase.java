@@ -11,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import reactor.core.publisher.Mono;
 
 import java.util.Arrays;
+import java.util.function.BiFunction;
 
 
 @Service
@@ -31,9 +32,14 @@ public class CreateUserUseCase implements SaveUser {
     public Mono<String> apply(UserDTO userDTO) {
         userDTO.valdiateEmail(userDTO.getEmail());
         userDTO.valdiateEmail(userDTO.getAlternativeEmail());
-        return userRepository.
-                save(mapperUtils.mapperToUser(userDTO.getId()).apply(fullNameModify(userDTO)))
-                .map(User::getId);
+        return  Mono.just(userDTO).flatMap(userDTO1 -> validateBeforeInsert(userDTO1))
+                .switchIfEmpty(Mono.defer(() ->
+                        userRepository.
+                                save(mapperUtils.mapperToUser(userDTO.getId()).apply(fullNameModify(userDTO)))
+                                .map(User::getId)
+                        ));
+
+
     }
 
     private UserDTO fullNameModify(UserDTO userDTO){
@@ -61,4 +67,11 @@ public class CreateUserUseCase implements SaveUser {
       }
       return completeName;
   }
+
+   /* private final BiFunction<UserRepository, UserDTO, Mono<User>> validateBeforeInsert
+            = (repo, user) -> repo.findById(user.getId());*/
+
+    private Mono<String> validateBeforeInsert(UserDTO userDTO){
+        return userRepository.findById(userDTO.getId()).map(user -> user.getId());
+    }
 }
